@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+        
+        body{
+            margin: 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+
+            background-color: lightblue;
+
+            overscroll-behavior: contain;
+            touch-action: manipulation;
+        }
+
+        div {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-top: 10%;
+        }
+
+    </style>    
+</head>
+<body>
+    <div>
+        <canvas id="canvas"> </canvas>
+        <!-- <canvas id="canvas" height="512px" width="288px"> </canvas> -->
+    </div>
+    <!-- <canvas id="background_canvas" height="512px" width="288px" > </canvas> -->
+    
+    <img src="./assets/background.png" id="background" class="hidden">
+    <img src="./assets/base.png" id="base" class="hidden">
+    <img src="./assets/pipe.png" id="pipe" class="hidden">
+    <img src="./assets/pipev.png" id="pipev" class="hidden">
+    <img src="./assets/bird.png" id="bird" class="hidden">
+    
+
+    <!-- <script src="background.js"></script> -->
+    <script src="index.js"></script>
+</body>
+</html>
+
+<!-- <canvas id="canvas"></canvas> -->
+
+
+
