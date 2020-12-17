@@ -8,23 +8,37 @@ const pipev_img = document.getElementById('pipev');
 const bird_img = document.getElementById('bird');
 const base_img = document.getElementById('base');
 
+// Set width and heights
+
+canvas.height = Math.floor(body.clientHeight*0.9);
+canvas.width = Math.floor(canvas.height/1.8);
+
+if(canvas.width > body.clientWidth){
+    canvas.width = Math.floor(body.clientWidth);
+    canvas.height = canvas.width * 1.8;
+} 
+
+
 //Ground height
-const BASEHEIGHT = 100;
+const BASEHEIGHT = Math.floor(canvas.height/5);
 
+const BIRDHEIGHT = Math.floor(canvas.height/21);
+const BIRDWIDTH = Math.floor(canvas.width/8.5);
 
-// const BIRDSIZE = 20;
-
-const GRAVITY = 0.3;
 
 //Pipe gaps
-const HORIGAP = 100;
-const VERTGAP = 100;
-const PIPESPEED = 2;
+const HORIGAP = 100//Math.floor(canvas.width/5.12); 
+const VERTGAP = Math.floor(BIRDHEIGHT*4);
+const PIPESPEED = Math.floor(BIRDWIDTH/17);
 
-// Set width and heights
-canvas.height = 512;
-canvas.width = 288;
+const JUMP = Math.floor(BIRDHEIGHT/5);
+const GRAVITY = JUMP/16.6;
 
+const PIPEWIDTH = Math.floor(BIRDWIDTH*1.5);
+const PIPEHEIGHT = Math.floor(PIPEWIDTH * 6.15);
+
+const smalltextsize = Math.floor(canvas.width/40)
+const texty = Math.floor(canvas.height/3.7)
 
 
 let pause = true;
@@ -39,10 +53,10 @@ let die = new Audio("sounds/die.wav");
 //event listeners
 document.addEventListener('keydown', e =>{
     //COMANDOS PARA PAUSE
-    // if(e.keyCode === 13){
-    //     pause = !pause
-    //     update()
-    // } else 
+    if(e.keyCode === 13){
+        pause = !pause
+        update()
+    } else 
     
     if(e.keyCode === 32){
 
@@ -50,19 +64,19 @@ document.addEventListener('keydown', e =>{
 
         if(gameover) restart();
         
-        bird.vely = -5;
+        bird.vely = -JUMP;
         
         if(running) wing.play()
     };
 } )
 
-document.addEventListener('touchstart', e =>{
+document.addEventListener('touchstart', () =>{
 
     if(!running) running = true;
 
     if(gameover) restart();
     
-    bird.vely = -5;
+    bird.vely = -JUMP;
     
     if(running) wing.play()
 
@@ -104,19 +118,18 @@ function Bird(x, y){
 
     this.draw = function(){
         ctx.beginPath();
-        ctx.drawImage(this.img, this.x, this.y);
+        ctx.drawImage(this.img, this.x, this.y, BIRDWIDTH, BIRDHEIGHT);
         ctx.closePath();
     }
 }
 
 function Pipe(){
     this.img = pipe_img;
-    this.width = this.img.width;
-    
+
     //Começar no lado direito
-    this.x = canvas.width + this.width;
+    this.x = canvas.width + PIPEWIDTH;
     //valor aleatório do y
-    this.y = randomIntFromRange(canvas.height - BASEHEIGHT - 10, 100);
+    this.y = randomIntFromRange(canvas.height - BASEHEIGHT - Math.floor(canvas.height/50), Math.floor(canvas.height/5));
 
     //boolean para checar se saiu
     this.remove = false;
@@ -138,7 +151,7 @@ function Pipe(){
     this.update = () => {
 
         //se passar do pássaro, parar de contar
-        if(this.x + this.width < bird.x) {
+        if(this.x + PIPEWIDTH < bird.x) {
             this.current = false
         }
 
@@ -150,12 +163,12 @@ function Pipe(){
         }
 
         //Se saiu do mapa
-        if(this.x + this.width <= 0) {
+        if(this.x + PIPEWIDTH <= 0) {
             this.remove = true;
         }
 
         //y do cano de cima é igual ao this.y - gap - altura
-        this.uppipey = this.y - HORIGAP - this.imgv.height;
+        this.uppipey = this.y - VERTGAP - PIPEHEIGHT;
         
         this.x -= this.speed;
         
@@ -164,7 +177,7 @@ function Pipe(){
             //se encostar no bird
             if( bird.x + bird.img.width >= this.x && 
                 (bird.y + bird.img.height >= this.y ||
-                bird.y <= this.y - HORIGAP)
+                bird.y <= this.y - VERTGAP)
                 ) {
                     //Die
                     die.play();
@@ -177,17 +190,17 @@ function Pipe(){
 
     this.draw = () => {
         ctx.beginPath();
-        ctx.drawImage(this.img, this.x, this.y);
-        ctx.drawImage(this.imgv, this.x, this.uppipey);
+        ctx.drawImage(this.img, this.x, this.y, PIPEWIDTH, PIPEHEIGHT);
+        ctx.drawImage(this.imgv, this.x, this.uppipey, PIPEWIDTH, PIPEHEIGHT);
         ctx.closePath();
     }
 }
 
 function Background(){
-    this.x = 0;
-    this.y = 0;
     this.img = background_img;
     this.width = canvas.width;
+    this.x = this.width;
+    this.y = 0;
 
     this.speed = -0.5;
 
@@ -195,35 +208,38 @@ function Background(){
         this.draw();
         this.x += this.speed;
         //se passou 3/4 da imagem, voltar para 0
-        if(this.x <= -(3*this.img.width/4)) this.x = 0;
+        if(this.x <= 0) this.x = canvas.width;
 
     }
 
     this.draw = () => {
         ctx.beginPath();
-        ctx.drawImage(this.img, this.x, this.y);
+        ctx.drawImage(this.img, this.x, this.y, canvas.width, canvas.height);
+        ctx.drawImage(this.img, this.x-this.width, this.y, canvas.width, canvas.height);
         ctx.closePath();
     }
 } 
 
 function Base(){
-    this.x = 0;
-    this.y = canvas.height - BASEHEIGHT;
     this.img = base_img;
     this.width = canvas.width;
+    this.height=BASEHEIGHT;
+    this.x = this.width;
+    this.y = canvas.height - BASEHEIGHT;
 
     this.speed = -PIPESPEED;
 
     this.update = () => {
         this.draw();
         this.x += this.speed;
-        if(this.x <= -(3*this.img.width/4)) this.x = 0;
+        if(this.x <= 0) this.x = this.width;
 
     }
 
     this.draw = () => {
         ctx.beginPath();
-        ctx.drawImage(this.img, this.x, this.y);
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        ctx.drawImage(this.img, this.x-this.width, this.y, this.width, this.height);
         ctx.closePath();
     }
 
@@ -264,13 +280,14 @@ function restart(){
     init();
 }
 
+
 function update(){
     ctx.clearRect(0,0,canvas.width, canvas.height);
 
     if(running){
         tts++;
         //se está na hora de criar um novo Pipe
-        if(tts >= VERTGAP){
+        if(tts >= HORIGAP){
             tts = 0;
             pipes.push(new Pipe());
         }
@@ -290,9 +307,9 @@ function update(){
         if(score > record) record = score
 
         //escrever texto
-        writeTextCanvas(`You lose!`, 10, 160, 'white', 30);
-        writeTextCanvas(`Score: ${score}`, 10, 190, 'white', 15);
-        writeTextCanvas("Clique SPACE", 10, 220, 'white', 10);
+        writeTextCanvas(`You lose!`, smalltextsize, texty*0.9, 'white', smalltextsize*3);
+        writeTextCanvas(`Score: ${score}`, smalltextsize, texty, 'white', smalltextsize*1.5);
+        writeTextCanvas("Clique SPACE", smalltextsize, texty*1.1, 'white', smalltextsize);
 
     } else {
         //Só fazer update se não for gameover
@@ -310,20 +327,20 @@ function update(){
         base.update()
         bird.update();
 
-        if(running) writeTextCanvas(score, 2, 15, 'white', 15);
+        if(running) writeTextCanvas(score, smalltextsize/5, smalltextsize*1.5, 'white', smalltextsize*1.5);
     }
 
     //Tela de start
     if(!running && !gameover){
-        writeTextCanvas("Flappy Canvas", 10, 200, 'white', 30);
-        writeTextCanvas("Clique SPACE para começar", 10, 220, 'white', 10);
-        writeTextCanvas(`Record: ${record}`, 0, 15, 'white', 15);
+        writeTextCanvas("Flappy Canvas", smalltextsize, texty, 'white', smalltextsize*3);
+        writeTextCanvas("Clique SPACE para começar", smalltextsize, texty*1.1, 'white', smalltextsize);
+        writeTextCanvas(`Record: ${record}`, 0, smalltextsize*1.5, 'white', smalltextsize*1.5);
     } 
 
     
-    // if(!pause){   
+    if(!pause){   
         requestAnimationFrame(update);
-    // };
+    };
 
 }
 
