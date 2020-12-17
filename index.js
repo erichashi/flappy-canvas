@@ -41,7 +41,7 @@ const smalltextsize = Math.floor(canvas.width/40)
 const texty = Math.floor(canvas.height/3.7)
 
 
-let pause = true;
+// let pause = true;
 let running = false;
 let gameover = false;
 
@@ -53,10 +53,10 @@ let die = new Audio("sounds/die.wav");
 //event listeners
 document.addEventListener('keydown', e =>{
     //COMANDOS PARA PAUSE
-    if(e.keyCode === 13){
-        pause = !pause
-        update()
-    } else 
+    // if(e.keyCode === 13){
+    //     pause = !pause
+    //     update()
+    // } else 
     
     if(e.keyCode === 32){
 
@@ -338,9 +338,9 @@ function update(){
     } 
 
     
-    if(!pause){   
+    // if(!pause){   
         requestAnimationFrame(update);
-    };
+    // };
 
 }
 
