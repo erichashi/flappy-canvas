@@ -3,10 +3,12 @@ const ctx = canvas.getContext('2d');
 const body = document.body;
 
 const background_img = document.getElementById('background');
+const base_img = document.getElementById('base');
 const pipe_img = document.getElementById('pipe');
 const pipev_img = document.getElementById('pipev');
 const bird_img = document.getElementById('bird');
-const base_img = document.getElementById('base');
+const birddown_img = document.getElementById('birddown');
+const birdup_img = document.getElementById('birdup');
 
 // Set width and heights
 
@@ -27,7 +29,7 @@ const BIRDWIDTH = Math.floor(canvas.width/8.5);
 
 
 //Pipe gaps
-const HORIGAP = 100//Math.floor(canvas.width/5.12); 
+const HORIGAP = 120//Math.floor(canvas.width/5.12); 
 const VERTGAP = Math.floor(BIRDHEIGHT*4);
 const PIPESPEED = Math.floor(BIRDWIDTH/17);
 
@@ -104,6 +106,12 @@ function Bird(x, y){
             //Cair
             this.y += this.vely;
             this.vely += GRAVITY;
+        }
+
+        if(this.vely < 0){
+            this.img = birddown_img;
+        } else {
+            this.img = birdup_img;
         }
 
         //Se encostar no chão
