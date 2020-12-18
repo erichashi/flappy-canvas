@@ -68,7 +68,10 @@ document.addEventListener('keydown', e =>{
         
         bird.vely = -JUMP;
         
-        if(running) wing.play()
+        if(running){ 
+            wing.currentTime = 0;
+            wing.play()
+        }
     };
 } )
 
@@ -79,8 +82,11 @@ document.addEventListener('touchstart', () =>{
     if(gameover) restart();
     
     bird.vely = -JUMP;
-    
-    if(running) wing.play()
+
+    if(running){ 
+        wing.currentTime = 0;
+        wing.play()
+    }
 
 } )
 
@@ -117,8 +123,9 @@ function Bird(x, y){
         //Se encostar no chão
         if(this.y + this.img.height >= canvas.height - BASEHEIGHT){
             //Morrer
-            die.play();
             gameover = true;
+            die.currentTime = .3 ;
+            die.play();
         }
 
         this.draw();
@@ -166,6 +173,7 @@ function Pipe(){
         //Se não é current e não passou, score++
         if(!this.current && !this.pass){
             score++;
+            point.currentTime = 0;
             point.play();
             this.pass = true;
         }
@@ -188,6 +196,7 @@ function Pipe(){
                 bird.y <= this.y - VERTGAP)
                 ) {
                     //Die
+                    die.currentTime = .3 ;
                     die.play();
                     gameover = true;
                 }
