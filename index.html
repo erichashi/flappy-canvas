@@ -3,29 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Flappy</title>
+    <link rel="shortcut icon" href="assets/img/bird.png" type="image/x-icon">
+
     <style>
-        .hidden {
-            display: none;
+        html{
+            position: fixed;
+            overflow: hidden;
         }
         
         body{
             margin: 0;
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             background-color: lightblue;
 
             overscroll-behavior: contain;
             touch-action: manipulation;
+            overflow: hidden;
         }
 
         div {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            margin-top: 2%;
+            display: inline-block;
+            text-align: center;
+            width: 95%;
         }
 
     </style>    
@@ -33,25 +39,27 @@
 <body>
     <div>
         <canvas id="canvas"> </canvas>
-        <!-- <canvas id="canvas" height="512px" width="288px"> </canvas> -->
     </div>
-    <!-- <canvas id="background_canvas" height="512px" width="288px" > </canvas> -->
-    
-    <img src="./assets/background.png" id="background" class="hidden">
-    <img src="./assets/base.png" id="base" class="hidden">
-    <img src="./assets/pipe.png" id="pipe" class="hidden">
-    <img src="./assets/pipev.png" id="pipev" class="hidden">
-    <img src="./assets/bird.png" id="bird" class="hidden">
-    <img src="./assets/birddown.png" id="birddown" class="hidden">
-    <img src="./assets/birdup.png" id="birdup" class="hidden">
     
 
-    <!-- <script src="background.js"></script> -->
-    <script src="index.js"></script>
+    <script src="src/Background.js"></script>
+    <script src="src/Base.js"></script>
+    <script src="src/Bird.js"></script>
+    <script src="src/Pipe.js"></script>
+    
+    <script src="src/utils.js"></script>
+
+    <script src="src/StateMachine.js"></script>
+    <script src="src/states/BaseState.js"></script>
+    <script src="src/states/PlayState.js"></script>
+    <script src="src/states/TitleState.js"></script>
+    <script src="src/states/GameOverState.js"></script>
+
+    <script src="src/Constants.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
 
-<!-- <canvas id="canvas"></canvas> -->
 
 
 

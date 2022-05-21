@@ -1,11 +1,14 @@
 # Flappy
-Clique SPACE ou touch para jogar.  
+## the Flappy Bird web-based game built with JavaScript and HTML5 Canvas tag   
+You can play at [Bandcode](http://bandcode.colband.net.br/), the programming club @ [Colband](http://colband.net.br/) 
 
+### Features
+- Responsive app: play on different devices 
+- Local storage to store record
+- use of the original assets 
 
-![alt text](https://github.com/abac-axi/flappy-canvas/blob/main/game.png?raw=true)
+### Play
+- PC: use the space bar
+- Mobile: touch!
 
-### Assets
-https://github.com/samuelcust/flappy-bird-assets
-
-### TODO:
-- resize
+![landing image](https://github.com/erichashi/flappy-canvas/blob/main/thumb.png?raw=true)
